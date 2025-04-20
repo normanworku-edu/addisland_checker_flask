@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Land Plot Viewer</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; }
+        form { margin-bottom: 20px; }
+        input, button { padding: 10px; font-size: 16px; }
+        #validity-container { width: 80%; margin: auto; margin-bottom: 20px; }
+        #map-container { width: 80%; margin: auto; }
+    </style>
+</head>
+<body>
+    <h2>Addis Ababa Land Title Deed Checker</h2>
+    <form method="POST">
+        <!-- First line: Label and input box -->
+        <div>
+            <label for="title_deed">Enter Title Deed Number:</label>
+            <input type="text" id="title_deed" name="title_deed" placeholder="e.g. AK1181145161502962" required>
+        </div>
+    
+        <!-- Second line: Buttons -->
+        <div style="margin-top: 10px;">
+            <button type="submit">Check</button>
+            <button id="open_in_google_map_btn">Google Map</button>
+            <button id="open_in_addisland_btn">Addisland Doc</button>
+        </div>
+    </form>
+    
+    {% if validity_html %}
+        <div id="validity-container">
+            {{ validity_html | safe }}
+        </div>
+    {% endif %}
+
+    {% if map_html %}
+        <div id="map-container">
+            {{ map_html | safe }}
+        </div>
+    {% endif %}
+
+    
+    <script>
+        // Get the link passed from Flask
+        const google_map_link = "{{ google_map_href }}";  // Flask variable injected into the HTML
+        const addisland_link = "{{ addisland_href }}";  // Flask variable injected into the HTML
+
+        // Set up the button click event to open the link
+        document.getElementById("open_in_google_map_btn").addEventListener("click", function() {
+            if (google_map_link) {
+                window.open(google_map_link, "_blank");  // Open the link in a new tab
+            } else {
+                alert("Link is not available.");
+            }
+        });
+
+        // Set up the button click event to open the link
+        document.getElementById("open_in_addisland_btn").addEventListener("click", function() {
+            if (addisland_link) {
+                window.open(addisland_link, "_blank");  // Open the link in a new tab
+            } else {
+                alert("Link is not available.");
+            }
+        });
+    </script>
+
+</body>
+</html>
